@@ -5,12 +5,15 @@ import {
 } from 'react-router-dom';
 
 import {
+  AuthPageLayout,
   ErrorBoundary,
   PageLayout
 } from '../components';
 
 const Home = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Home'));
 const Category = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Category'));
+const Login = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Login'));
+const Register = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Register'));
 
 const routers = createBrowserRouter([
   {
@@ -29,6 +32,20 @@ const routers = createBrowserRouter([
         path: 'category',
         element: <Category />
       },
+    ]
+  },
+  {
+    element: <AuthPageLayout />,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: 'login',
+        element: <Login />
+      },
+      {
+        path: 'register',
+        element: <Register />
+      }
     ]
   }
 ]);
