@@ -76,7 +76,7 @@ const Page: FC<IPageProps> = ({
 
   return (
     <SectionStyled {...rest}>
-      {title || extra && (
+      {(title || extra) && (
         <SpaceBetween>
           <TitleStyled>
             {isBack && <ArrowIconStyled data-testid="page-back-icon" onClick={handleBack} />}

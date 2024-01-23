@@ -17,7 +17,7 @@ export const useTabs = (tab: string) => {
   const changeTab = useCallback((key: string) => {
     setTabKey(key);
     navigate(`/${key}`);
-  }, []);
+  }, [navigate]);
   
   return { tabKey, setTabKey: changeTab };
 }

@@ -24,20 +24,19 @@ export const useAuth = <T extends Partial<T>>(): {
     signin(user).then(() => {
       navigate('/');
     });
-  }, []);
+  }, [navigate]);
 
   const onRegister = useCallback((user: T): void => {
-    console.log(user, 'onRegister');
     signup(user).then(() => {
       navigate('/');
     });
-  }, []);
+  }, [navigate]);
 
   const onLogout = useCallback((): void => {
     localStorage.setItem('user', '');
     clearTokens();
     navigate('/login');
-  }, []);
+  }, [navigate]);
   
   
   return {

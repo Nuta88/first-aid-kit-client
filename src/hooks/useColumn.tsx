@@ -95,7 +95,7 @@ export const useColumn = (onFilter: (filter: Partial<TQueryFilter>) => void) => 
                 style={{ float: 'left', paddingRight: '4px' }}
                 checked={selectedKeys.includes(item.value)}>
               </Checkbox>
-              <a>{item.label.toUpperCase()}</a>
+              {item.label.toUpperCase()}
             </Menu.Item>
           ))}
         </Menu>

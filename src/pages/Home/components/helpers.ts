@@ -17,11 +17,11 @@ export type IFormValues = Omit<Medicine, "expiration_date"> & { expiration_date:
 export const getTableRowColor = (date: string) => isExpiresThisMonth(date) ? 'rgba(236,165,165,0.43)' : 'default';
 
 const convertMedicineToFormValues = (medicine: Medicine): IFormValues => {
-  return <IFormValues>{
+  return {
     ...medicine,
     categoryNames: medicine.categories.map(c => c.name),
     expiration_date: parseDate(medicine['expiration_date'], dateFormat)
-  }
+  } as IFormValues
 };
 export const createInitFormValues = (medicine: Medicine | null): IFormValues => {
   if ( medicine ) return convertMedicineToFormValues(medicine);

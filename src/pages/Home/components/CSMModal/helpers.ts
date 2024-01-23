@@ -9,12 +9,12 @@ export type IFormValues = Pick<Medicine, "name" | "description"> & { categoryNam
 export const convertMedicineToFormValues = (medicine: IConstantlyStoredMedicine): IFormValues => {
   const { name, categories, description, priority } = medicine;
   
-  return <IFormValues>{
+  return {
     name,
     description,
     priority,
     categoryNames: categories.map(c => c.name)
-  }
+  } as IFormValues
 };
 export const createInitFormValues = (medicine: IConstantlyStoredMedicine | null): IFormValues => {
   if ( medicine ) return convertMedicineToFormValues(medicine);
