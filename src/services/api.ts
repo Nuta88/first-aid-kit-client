@@ -78,6 +78,8 @@ const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth(baseQuery),
   tagTypes: [
+    'Category',
+    'Medicine',
     'ConstantlyStoredMedicine'
   ],
   endpoints: () => ({})
