@@ -10,6 +10,7 @@ import {
 } from '../components';
 
 const Home = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Home'));
+const Category = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Category'));
 
 const routers = createBrowserRouter([
   {
@@ -23,9 +24,13 @@ const routers = createBrowserRouter([
       {
         path: '/',
         element: <Home />
-      }
+      },
+      {
+        path: 'category',
+        element: <Category />
+      },
     ]
-  },
+  }
 ]);
 
 const AppRouters = (): JSX.Element => (
