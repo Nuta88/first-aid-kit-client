@@ -77,7 +77,9 @@ const baseQueryWithReauth: (baseQuery: BaseQueryType) => BaseQueryType = (
 const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth(baseQuery),
-  tagTypes: [],
+  tagTypes: [
+    'ConstantlyStoredMedicine'
+  ],
   endpoints: () => ({})
 });
 
