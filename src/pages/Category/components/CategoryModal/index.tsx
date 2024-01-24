@@ -15,11 +15,11 @@ import { replaceSpaceToUnderscore } from '../../../../utils/string';
 interface ICategoryModalProps {
   isOpen: boolean;
   category: ICategory | null;
-  onCreate: (category: ICategory) => void;
+  onSave: (category: ICategory) => void;
   onCancel: () => void
 }
 
-const CategoryModal: FC<ICategoryModalProps> = ({ isOpen, category, onCreate, onCancel }) => {
+const CategoryModal: FC<ICategoryModalProps> = ({ isOpen, category, onSave, onCancel }) => {
   const title: string = category ? 'Edit category' : 'Add new category';
   const initialValues = category || {name: ''};
   const [ form ] = Form.useForm();
@@ -30,7 +30,7 @@ const CategoryModal: FC<ICategoryModalProps> = ({ isOpen, category, onCreate, on
   };
   
   const onFinish = (values: ICategory): void => {
-    onCreate({
+    onSave({
       ...initialValues,
       ...values,
       name: replaceSpaceToUnderscore(values.name).toLowerCase()

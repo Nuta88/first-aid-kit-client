@@ -21,13 +21,21 @@ const categoryApi = api.injectEndpoints({
       }),
       invalidatesTags: [ 'Category' ]
     }),
+    updateCategory: builder.mutation<ICategory, Partial<ICategory>>({
+      query: (body) => ({
+        url: apiUrls.category.withId(body.id as number),
+        method: 'PATCH',
+        body
+      }),
+      invalidatesTags: [ 'Category' ]
+    }),
     deleteCategory: builder.mutation<Medicine, number>({
       query: (id, ...params) => ({
         url: apiUrls.category.withId(id),
         method: 'DELETE',
         params
       }),
-      invalidatesTags: [ 'Medicine' ]
+      invalidatesTags: [ 'Category' ]
     })
   }),
   overrideExisting: false,
@@ -37,5 +45,6 @@ const categoryApi = api.injectEndpoints({
 export const {
   useFetchCategoryQuery,
   useCreateCategoryMutation,
+  useUpdateCategoryMutation,
   useDeleteCategoryMutation
 } = categoryApi;

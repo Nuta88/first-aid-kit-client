@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import {
   AddIcon,
   CircleButton,
@@ -17,9 +18,11 @@ import {
 import {
   useCreateCategoryMutation,
   useDeleteCategoryMutation,
-  useFetchCategoryQuery
+  useFetchCategoryQuery,
+  useUpdateCategoryMutation
 } from '../../services/category';
 import { ICategory } from '../../types';
+import { Medicine } from "../../types/medicine";
 import { replaceUnderscoreToSpace } from '../../utils/string';
 import CategoryModal from './components/CategoryModal';
 
@@ -27,6 +30,7 @@ const Category = (): JSX.Element => {
   const { query, setQuery } = useQueryFilters();
   const { data: categories = [] } = useFetchCategoryQuery(query);
   const [ createCategory ] = useCreateCategoryMutation();
+  const [ updateCategory ] = useUpdateCategoryMutation();
   const [ deleteCategory ] = useDeleteCategoryMutation();
   const { getSearchProps } = useColumn(setQuery);
   const { isOpenModal, content: selectedCategory, hideModal, openModal } = useModal<ICategory>();
@@ -35,6 +39,15 @@ const Category = (): JSX.Element => {
     
     openModal();
   };
+  
+  const handleCreateOrUpdate = useCallback((category: ICategory) => {
+    if ( selectedCategory ) {
+      updateCategory(category);
+      return;
+    }
+    
+    createCategory(category);
+  }, [selectedCategory]);
   
   return (
     <Page
@@ -89,7 +102,7 @@ const Category = (): JSX.Element => {
           isOpen={isOpenModal}
           category={selectedCategory}
           onCancel={hideModal}
-          onCreate={createCategory}
+          onSave={handleCreateOrUpdate}
         />
       )}
     </Page>
