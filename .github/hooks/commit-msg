@@ -1,0 +1,13 @@
+#!/bin/bash
+
+INPUT_FILE=$1
+START_LINE=`head -n1 $INPUT_FILE`
+PATTERN="^(FAK)-[[:digit:]]+: "
+if ! [[ "$START_LINE" =~ $PATTERN ]]; then
+  RED='\033[0;31m'
+  NC='\033[0m'
+  echo -e "${RED}[Error] Git message template violation. Message should have following template:
+[youtrack story id]: [commit message]
+e.g. FAK-141: add oauth2 security config${NC}"
+  exit 1
+fi
