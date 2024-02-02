@@ -1,0 +1,18 @@
+#!/bin/sh
+
+LC_ALL=C
+
+LOCAL_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+BRANCH_REGEX="^(feature|bugfix|hotfix)/(FAK-[0-9]+)(-([a-z0-9-]+)+)$"
+BRANCH_PATTERN="[branch type]/[youtrack story id]-[branch name (all words should consist of lowercase letters separated by dash)]"
+ERROR_MESSAGE="Branch name template violation. Branch should have following template:
+        $BRANCH_PATTERN
+        e.g. feature/FAK-100000-create-medicine-endpoint"
+
+if [[ ! $LOCAL_BRANCH =~ $BRANCH_REGEX ]]
+then
+    echo "[Error] $ERROR_MESSAGE"
+    exit 1
+fi
+
+exit 0
