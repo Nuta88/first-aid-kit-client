@@ -24,15 +24,14 @@ interface IMedicineModalProps {
   isOpen: boolean;
   medicine: Medicine | null;
   onCreate: (medicine: Medicine) => void;
+  onUpdate: (medicine: Medicine) => void;
   onCancel: () => void
 }
 
-const MedicineModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCreate, onCancel }) => {
+const MedicineModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCreate, onUpdate, onCancel }) => {
   const { data: categories = [] } = useFetchCategoryQuery({});
   const initialValues = createInitFormValues(medicine);
   const [ form ] = Form.useForm();
-  
-  console.log('medicineNames');
   
   const onCloseModal = (): void => {
     form.resetFields();
@@ -40,8 +39,16 @@ const MedicineModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCreate, on
   };
   
   const onFinish = (values: IFormValues): void => {
-    onCreate(generateMedicine(values, medicine, categories));
+    const newMed = generateMedicine(values, medicine, categories);
+    
     onCloseModal();
+    
+    if ( medicine ) {
+      onUpdate(newMed);
+      return;
+    }
+  
+    onCreate(newMed);
   };
 
   return (
