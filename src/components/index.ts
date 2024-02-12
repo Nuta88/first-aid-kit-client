@@ -25,6 +25,7 @@ import {
   ArrowLeftIcon,
   ArrowUpIcon,
   AvatarIcon,
+  AuditIcon,
   BankIcon,
   CheckIcon,
   CloseIcon,
@@ -33,7 +34,8 @@ import {
   EditIcon,
   LockIcon,
   LogoutIcon,
-  MailIcon
+  MailIcon,
+  SyncIcon,
 } from './Icons';
 import { Loading } from './Loading';
 import { BasicModal } from './Modal';
@@ -87,6 +89,7 @@ export {
   Search,
   Select,
   SelectOption,
+  AuditIcon,
   AddIcon,
   AvatarIcon,
   ArrowLeftIcon,
@@ -101,6 +104,7 @@ export {
   LogoutIcon,
   ArrowUpIcon,
   ArrowDownIcon,
+  SyncIcon,
   TooltipIconButton,
   TextButton,
   Dropdown,

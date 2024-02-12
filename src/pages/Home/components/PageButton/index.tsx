@@ -1,11 +1,16 @@
 import {
   FC,
-  memo
+  memo,
+  useCallback
 } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   AddIcon,
+  AuditIcon,
   TooltipIconButton
 } from '../../../../components';
+import { MedicineTabs } from "../../../../constants/medicine";
 
 interface IPageButtonProps {
   tabKey: string,
@@ -13,13 +18,31 @@ interface IPageButtonProps {
   openCSMModal: () => void,
 }
 
+const LogoStyled = styled(TooltipIconButton)`
+  margin-right: .6rem;
+`;
+
 const PageButton: FC<IPageButtonProps> = ({ tabKey, openMedicineModal, openCSMModal }) => {
-  const isCSM = tabKey === 'must-have';
-  console.log(tabKey, 'jhjkhjk');
+  const navigate = useNavigate();
+  const isCSM = tabKey === MedicineTabs.MustHave;
   const title = isCSM ? 'Add medicine for permanent storage' : 'Add medicine';
+  
+  const handleAudit = useCallback(async () => {
+    navigate('/audit');
+  }, [ navigate ]);
   
   return (
     <>
+      {
+      tabKey === MedicineTabs.Medicine && (
+        <LogoStyled
+          tooltip="Audit medicines"
+          icon={<AuditIcon />}
+          data-testid="audit-btn"
+          onClick={handleAudit}
+        />
+      )
+    }
       <TooltipIconButton
         tooltip={title}
         icon={<AddIcon />}

@@ -12,7 +12,7 @@ import {
   saveLoginTokens,
   saveTokensFromResponse
 } from './helpers';
-import { clearTokens } from '../storage/indexedDB';
+import { clearTokens } from '../storage/auth';
 
 type BaseQueryType = ReturnType<typeof fetchBaseQuery>;
 

@@ -10,6 +10,7 @@ import {
   PageLayout
 } from '../components';
 
+const Audit = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Audit'));
 const Home = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Home'));
 const Category = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Category'));
 const Login = lazy(async (): Promise<{ readonly default: () => JSX.Element }> => await import('../pages/Login'));
@@ -31,6 +32,10 @@ const routers = createBrowserRouter([
       {
         path: 'category',
         element: <Category />
+      },
+      {
+        path: 'audit',
+        element: <Audit />
       },
     ]
   },

@@ -12,7 +12,9 @@ import {
   LogoutOutlined,
   MailOutlined,
   PlusOutlined,
-  UserOutlined
+  UserOutlined,
+  AuditOutlined,
+  SyncOutlined,
 } from '@ant-design/icons';
 
 export {
@@ -29,5 +31,7 @@ export {
   MailOutlined as MailIcon,
   LogoutOutlined as LogoutIcon,
   ArrowUpOutlined as ArrowUpIcon,
-  ArrowDownOutlined as ArrowDownIcon
+  ArrowDownOutlined as ArrowDownIcon,
+  AuditOutlined as AuditIcon,
+  SyncOutlined as SyncIcon
 };

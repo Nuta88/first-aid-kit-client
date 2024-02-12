@@ -29,7 +29,7 @@ import PageButton from './components/PageButton';
 
 const Home = (): JSX.Element => {
   const { tab = 'medicine' } = useParams();
-  const { tabKey, setTabKey} = useTabs(tab ?? 'medicine');
+  const { tabKey, setTabKey } = useTabs(tab ?? 'medicine');
   const { query: expiredMedicineQuery, setQuery: setExpiredMedicineQuery } = useQueryFilters();
   const { query: medicineQuery, setQuery: setMedicineQuery } = useQueryFilters();
   const { isOpenModal, hideModal, content: medicine, openModal } = useModal<Medicine>();
