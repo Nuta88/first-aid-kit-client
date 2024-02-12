@@ -5,8 +5,11 @@ import {
 } from 'react-router-dom';
 
 import { authorizedPaths } from '../constants/apiUrls';
-import { useSigninMutation, useSignupMutation } from '../services/auth';
-import { clearTokens } from '../storage/indexedDB';
+import {
+  useSigninMutation,
+  useSignupMutation
+} from '../services/auth';
+import { clearStores } from '../storage/indexedDB';
 
 export const useAuth = <T extends Partial<T>>(): {
   isUserAuthorized: boolean;
@@ -34,7 +37,7 @@ export const useAuth = <T extends Partial<T>>(): {
 
   const onLogout = useCallback((): void => {
     localStorage.setItem('user', '');
-    clearTokens();
+    clearStores();
     navigate('/login');
   }, [navigate]);
   

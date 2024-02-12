@@ -2,7 +2,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import {
   getTokens,
   saveTokens
-} from '../storage/indexedDB';
+} from '../storage/auth';
 import { Tokens } from '../types/auth';
 
 const tokenEndpoints = ['signup', 'signin'];

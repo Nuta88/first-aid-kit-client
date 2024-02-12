@@ -9,7 +9,7 @@ import {
   MailIcon
 } from '../../components';
 import { useAuth } from '../../hooks';
-import { User } from "../../types/user";
+import { User } from '../../types/user';
 
 type TRegister = Omit<User, 'id'>;
 

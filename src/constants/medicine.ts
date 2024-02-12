@@ -3,4 +3,8 @@ export enum MedicinePriorityEnum {
   CATEGORY = 'category'
 }
 
-export const tabKeys = ['medicine','expired', 'must-have'];
+export enum MedicineTabs {
+  Medicine = 'medicine',
+  Expired = 'expired',
+  MustHave = 'must-have'
+}

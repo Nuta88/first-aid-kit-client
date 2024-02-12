@@ -1,38 +1,25 @@
 import { openDB } from 'idb';
 
-const dbName = 'my-database';
-const storeName = 'tokens';
+const dbName = 'first_aid_kit_database';
+export const authStoreName = 'auth';
+export const auditStoreName = 'audit';
 
 export const dbPromise = openDB(dbName, 1, {
   upgrade(db) {
-    db.createObjectStore(storeName);
-  },
+    db.createObjectStore(authStoreName);
+    db.createObjectStore(auditStoreName);
+    },
 });
 
-export const saveTokens = async (accessToken: string, refreshToken: string) => {
+export const clearStores = async () => {
   const db = await dbPromise;
-  const tx = db.transaction(storeName, 'readwrite');
-  const store = tx.objectStore(storeName);
-  store.put(accessToken, 'accessToken');
-  store.put(refreshToken, 'refreshToken');
-  store.put(accessToken, 'accessToken');
- 
-  await tx.done;
-};
+  const authTx = db.transaction(authStoreName, 'readwrite');
+  const authStore = authTx.objectStore(authStoreName);
+  const auditTx = db.transaction(auditStoreName, 'readwrite');
+  const auditStore = auditTx.objectStore(auditStoreName);
 
-export const getTokens = async () => {
-  const db = await dbPromise;
-  const tx = db.transaction(storeName, 'readonly');
-  const store = tx.objectStore(storeName);
-  const accessToken = await store.get('accessToken');
-  const refreshToken = await store.get('refreshToken');
-  
-  return { accessToken, refreshToken };
-};
-export const clearTokens = async () => {
-  const db = await dbPromise;
-  const tx = db.transaction(storeName, 'readwrite');
-  const store = tx.objectStore(storeName);
-  // @ts-ignore
-  store.clear();
-};
+  authStore.clear();
+  auditStore.clear();
+}
+
+
