@@ -1,11 +1,14 @@
 import { apiUrls } from '../constants/apiUrls';
-import { Medicine } from "../types/medicine";
+import {
+  Medicine,
+  TMedicine
+} from "../types/medicine";
 
 import api from './api';
 
 const medicineApi = api.injectEndpoints({
   endpoints: builder => ({
-    fetchMedicine: builder.query<Medicine[], Record<string, any> | undefined>({
+    fetchMedicine: builder.query<TMedicine[], Record<string, any> | undefined>({
       query: params => ({
         url: apiUrls.medicine.root,
         params
@@ -35,6 +38,14 @@ const medicineApi = api.injectEndpoints({
       }),
       invalidatesTags: [ 'Medicine' ]
     }),
+    updateMedicines: builder.mutation<Medicine[], Partial<Medicine[]>>({
+      query: (body) => ({
+        url: apiUrls.medicine.bulkUpdate,
+        method: 'POST',
+        body
+      }),
+      invalidatesTags: [ 'Medicine' ]
+    }),
     deleteMedicine: builder.mutation<Medicine, number>({
       query: (id, ...params) => ({
         url: apiUrls.medicine.withId(id),
@@ -53,5 +64,6 @@ export const {
   useFetchExpiredMedicineQuery,
   useCreateMedicineMutation,
   useUpdateMedicineMutation,
+  useUpdateMedicinesMutation,
   useDeleteMedicineMutation
 } = medicineApi;

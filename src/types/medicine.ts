@@ -57,3 +57,5 @@ export class ConstantlyStoredMedicine {
     this.description = description;
   }
 }
+
+export type TMedicine = Omit<Medicine, 'id'> & { id: number };

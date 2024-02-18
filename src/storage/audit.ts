@@ -1,12 +1,11 @@
 import { TAuditMedicine } from '../types/audit';
-import { Medicine } from '../types/medicine';
 
 import {
   auditStoreName,
   dbPromise
 } from './indexedDB';
 
-export const saveAuditMedicines = async (medicines: Medicine[]) => {
+export const saveAuditMedicines = async (medicines: TAuditMedicine[]) => {
   const db = await dbPromise;
   const tx = db.transaction(auditStoreName, 'readwrite');
   const store = tx.objectStore(auditStoreName);
@@ -14,20 +13,33 @@ export const saveAuditMedicines = async (medicines: Medicine[]) => {
   store.clear();
   
   medicines.forEach((medicine) => {
-    store.add({...medicine, new_amount: 0, isCorrect: true }, medicine.id as number);
+    store.add(medicine, medicine.id as number);
   });
   
   await tx.done;
 };
+export const updateAuditMedicines = async (medicines: TAuditMedicine[]) => {
+  const db = await dbPromise;
+  const tx = db.transaction(auditStoreName, 'readwrite');
+  const store = tx.objectStore(auditStoreName);
+  
+  store.clear();
+  
+  medicines.forEach((medicine) => {
+    store.add(medicine, medicine.id);
+  });
+  
+  return store.getAll();
+};
 
-export const updateAuditMedicines = async (medicine: TAuditMedicine): Promise<TAuditMedicine[]> => {
+export const updateAuditMedicine = async (medicine: TAuditMedicine): Promise<TAuditMedicine[]> => {
   const db = await dbPromise;
   const tx = db.transaction(auditStoreName, 'readwrite');
   const store = tx.objectStore(auditStoreName);
   const data = await store.getAll();
   
   if ( data.length ) {
-    await store.put(medicine, medicine.id as number);
+    await store.put(medicine, medicine.id);
   }
   
   return store.getAll();

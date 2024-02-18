@@ -1,5 +1,6 @@
 export const apiUrls = {
   root: '/',
+  audit: '/audit',
   home: '/home',
   auth: {
     signup: '/auth/signup',
@@ -8,6 +9,7 @@ export const apiUrls = {
   medicine: {
     root: '/medicine',
     expired: '/medicine/expired',
+    bulkUpdate: '/medicine/bulk-update',
     withId: (id: number) => `/medicine/${id}`
   },
   category: {
@@ -31,5 +33,9 @@ export const navigationLinks = [
   {
     name: 'Category',
     link: apiUrls.category.root
+  },
+  {
+    name: 'Audit',
+    link: apiUrls.audit
   }
 ];

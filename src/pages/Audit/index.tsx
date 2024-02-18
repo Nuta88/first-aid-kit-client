@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 import {
-  CheckIcon,
   Page,
-  SpaceBetween,
   SyncIcon,
   Table,
   TooltipIconButton
@@ -12,30 +10,55 @@ import { ICategory } from '../../types';
 import { TAuditMedicine } from '../../types/audit';
 import { replaceUnderscoreToSpace } from '../../utils/string';
 import EditableCell from './components/EditableCell';
+import { getRowBackground } from "./helpers/helpers";
 
 const Audit = (): JSX.Element => {
-  const { medicines, updateAudit, onAudit, onUpdateMedicine } = useAudit();
+  const {
+    medicines,
+    selectedRowKeys,
+    isLoading,
+    onUpdateAudit,
+    onSyncMedicines,
+    onSelectAudits
+  } = useAudit();
+  
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (selectedRowKeys: React.Key[]) => {
+      onSelectAudits(selectedRowKeys);
+    },
+    getCheckboxProps: (record: TAuditMedicine) => ({
+      disabled: record.isCorrect,
+      name: record.name,
+    }),
+  };
   
   return (
     <Page
       extra={
         <TooltipIconButton
+          loading={isLoading}
           tooltip="Sync"
           size="large"
           icon={<SyncIcon />}
           data-testid="sync-btn"
-          onClick={onAudit}
+          disabled={!selectedRowKeys.length}
+          onClick={onSyncMedicines}
         />
       }
     >
       <Table
         rowKey="id"
         size="small"
+        rowSelection={{
+          type: 'checkbox',
+          ...rowSelection,
+        }}
         dataSource={medicines}
         scroll={{ y: 350 }}
         onRow={(record: TAuditMedicine) => ({
           style: {
-            background: !record.isCorrect ? 'rgba(236,165,165,0.43)' : 'default',
+            background: getRowBackground(record),
           }
         })}
         columns={[
@@ -59,7 +82,7 @@ const Audit = (): JSX.Element => {
           {
             title: 'New Amount',
             key: 'new_amount',
-            render: (medicine) => <EditableCell record={medicine} dataIndex="new_amount" onSave={updateAudit} />,
+            render: (medicine) => <EditableCell record={medicine} dataIndex="new_amount" onSave={onUpdateAudit} />,
           },
           {
             title: 'Expiration date',
@@ -70,24 +93,6 @@ const Audit = (): JSX.Element => {
             title: 'Description',
             dataIndex: 'description',
             key: 'description'
-          },
-          {
-            title: '',
-            key: 'action',
-            width: 150,
-            render: (_, medicine: TAuditMedicine) => (
-              <SpaceBetween size="middle">
-                <TooltipIconButton
-                  type="primary"
-                  tooltip="Update medicine"
-                  size="middle"
-                  data-testid="update-medicine-btn"
-                  icon={<CheckIcon />}
-                  disabled={medicine.isCorrect}
-                  onClick={() => {onUpdateMedicine(medicine)}}
-                />
-              </SpaceBetween>
-            )
           }
         ]}
       />
