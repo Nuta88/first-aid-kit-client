@@ -3,47 +3,57 @@ import {
   useEffect,
   useState
 } from 'react';
+import { useMessage } from '../../../hooks';
 import {
+  useDeleteMedicineMutation,
   useFetchMedicineQuery,
   useUpdateMedicinesMutation
 } from '../../../services/medicine';
 import {
-  getAuditMedicines,
+  deleteAudit,
+  getAudits,
   saveAuditMedicines,
   updateAuditMedicine
 } from '../../../storage/audit';
 import { TAuditMedicine } from '../../../types/audit';
 import {
-  changedCorrectValueForUpdatedAudits,
-  convertMedicinesToDefaultAudit,
+  amountOfMatchedAudits,
   convertSelectedAuditsToMedicines,
-  isEquals
+  convertToDefaultAudits,
+  getSearchedAudit,
+  isEquals,
+  isFinishAudit,
+  prepareDataForStore,
+  updateSelectedAuditsToMatched
 } from '../helpers/helpers';
+import { useRowSelection } from "./useRowSelection";
+import { useSearch } from './useSearch';
 
 export const useAudit = () => {
   const { data: medicines = [] } = useFetchMedicineQuery({});
+  const { search, onSearch, onClearSearch } = useSearch();
+  const { rowSelection, selectedRowKeys, onSelectAudits } = useRowSelection();
+  const { onSuccess } = useMessage();
   const [ updateMedicines, result ] = useUpdateMedicinesMutation({});
+  const [ deleteMedicine ] = useDeleteMedicineMutation({});
   const [ auditMedicines, setAuditMedicines ] = useState<TAuditMedicine[]>([]);
-  const [ selectedRowKeys, setSelectedRowKeys ] = useState<React.Key[]>([]);
   
-  const handleSaveMedicinesToAuditStore = useCallback(async (audits: TAuditMedicine[]) => {
-    await saveAuditMedicines(audits);
-    
-    const items = await getAuditMedicines();
-    
+  const handleSaveToAuditStore = useCallback(async (audits: TAuditMedicine[]) => {
+    const items = await saveAuditMedicines(audits);
+  
     items.length && setAuditMedicines(items);
   }, [ ]);
   
   useEffect(() => {
     async function fetchAuditData() {
-      let items: TAuditMedicine[] = await getAuditMedicines();
-  
+      const items: TAuditMedicine[] = await getAudits();
+      
       if ( items?.length && isEquals(medicines, items) ) {
         setAuditMedicines(items);
         return;
       }
       
-      await handleSaveMedicinesToAuditStore(convertMedicinesToDefaultAudit(medicines));
+      await handleSaveToAuditStore(prepareDataForStore(items, medicines));
     }
   
     medicines.length && fetchAuditData();
@@ -53,28 +63,68 @@ export const useAudit = () => {
     const newValue = {...value, isCorrect: value.new_amount === value.amount };
     const items = await updateAuditMedicine(newValue);
   
-    setSelectedRowKeys(prevState => prevState.filter(key => key !== value.id.toString()));
+    onSelectAudits(selectedRowKeys.filter(key => key !== value.id.toString()));
+    onSuccess(`Amount of "${value.name}" audit updated successfully!`);
     setAuditMedicines(items);
   }, []);
   
+  const onFinishAudit = async () => {
+    await handleSaveToAuditStore(convertToDefaultAudits(auditMedicines));
+    onSelectAudits([]);
+    onSuccess('You are finished this audit!');
+  };
+  
+   const onSaveSelectedAuditsAsMatched = async () => {
+     await handleSaveToAuditStore(updateSelectedAuditsToMatched(auditMedicines, selectedRowKeys));
+     onSelectAudits([]);
+     onSuccess('Selected medicines have been successfully updated!');
+  };
+  
   const onSyncMedicines = async () => {
     const medicinesForSync = convertSelectedAuditsToMedicines(auditMedicines, selectedRowKeys);
-    await updateMedicines(medicinesForSync);
-    await handleSaveMedicinesToAuditStore(changedCorrectValueForUpdatedAudits(auditMedicines, selectedRowKeys))
     
-    setSelectedRowKeys([]);
+    await updateMedicines(medicinesForSync);
+    
+    if ( isFinishAudit(auditMedicines, selectedRowKeys)) return await onFinishAudit();
+    
+    await onSaveSelectedAuditsAsMatched();
   };
   
-  const onSelectAudits = (keys: React.Key[]) => {
-    setSelectedRowKeys(keys);
-  };
+  const onResetAudits = useCallback(async () => {
+    await onClearSearch();
+    await handleSaveToAuditStore(convertToDefaultAudits(auditMedicines));
+  
+    onSelectAudits([]);
+    onSuccess('Audit reset successfully!');
+  }, []);
+  
+  const onDeleteMedicine = useCallback(async (id: number) => {
+    const searchedAudits = getSearchedAudit(auditMedicines, search);
+    
+    if ( !searchedAudits.length ) await onClearSearch();
+    
+    await deleteAudit(id).then(() => {
+      onSuccess('Medicine deleted successfully!');
+    });
+    deleteMedicine(id);
+  }, []);
   
   return {
-    medicines: auditMedicines,
+    audits: {
+      items: getSearchedAudit(auditMedicines, search),
+      total: auditMedicines.length,
+      matched: amountOfMatchedAudits(auditMedicines),
+      unMatched: amountOfMatchedAudits(auditMedicines),
+    },
+    rowSelection,
     selectedRowKeys,
     isLoading: result.isLoading,
+    search,
     onUpdateAudit,
     onSyncMedicines,
-    onSelectAudits
+    onDeleteMedicine,
+    onSearch,
+    onClearSearch,
+    onResetAudits
   };
 }

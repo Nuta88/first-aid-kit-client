@@ -82,7 +82,9 @@ const Page: FC<IPageProps> = ({
             {isBack && <ArrowIconStyled data-testid="page-back-icon" onClick={handleBack} />}
             {title}
           </TitleStyled>
-          {extra}
+          <SpaceBetween>
+            {extra}
+          </SpaceBetween>
         </SpaceBetween>
       )}
       <CardStyled>

@@ -15,6 +15,8 @@ import {
   UserOutlined,
   AuditOutlined,
   SyncOutlined,
+  ShoppingOutlined,
+  UndoOutlined
 } from '@ant-design/icons';
 
 export {
@@ -33,5 +35,7 @@ export {
   ArrowUpOutlined as ArrowUpIcon,
   ArrowDownOutlined as ArrowDownIcon,
   AuditOutlined as AuditIcon,
-  SyncOutlined as SyncIcon
+  SyncOutlined as SyncIcon,
+  ShoppingOutlined as ShoppingIcon,
+  UndoOutlined as UndoIcon
 };

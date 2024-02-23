@@ -4,7 +4,7 @@ import { useNotification } from './useNotification';
 import { useColumn } from './useColumn';
 import { useQueryFilters } from './useQueryFilters';
 import { useTabs } from './useTabs';
-import { useAudit } from '../pages/Audit/hooks/useAudit';
+import { useMessage } from './useMessage';
 
 export {
   useModal,
@@ -13,5 +13,5 @@ export {
   useColumn,
   useQueryFilters,
   useTabs,
-  useAudit
+  useMessage
 };

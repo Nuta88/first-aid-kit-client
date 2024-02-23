@@ -57,8 +57,6 @@ const CSMModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCancel }) => {
     onCloseModal();
   };
   
-  console.log('CSMModal');
-  
   return (
     <BasicModal
       title={title}

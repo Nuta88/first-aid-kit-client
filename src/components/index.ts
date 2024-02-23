@@ -24,8 +24,8 @@ import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowUpIcon,
-  AvatarIcon,
   AuditIcon,
+  AvatarIcon,
   BankIcon,
   CheckIcon,
   CloseIcon,
@@ -35,7 +35,9 @@ import {
   LockIcon,
   LogoutIcon,
   MailIcon,
+  ShoppingIcon,
   SyncIcon,
+  UndoIcon,
 } from './Icons';
 import { Loading } from './Loading';
 import { BasicModal } from './Modal';
@@ -51,6 +53,7 @@ import {
   ColumnsType,
   Table
 } from './Table';
+import { EditableNumberCell } from './Table/components/EditableNumberCell'
 import { Tabs } from './Tabs';
 import { Tooltip } from './Tooltip';
 import { Link } from './Typography/Link';
@@ -78,6 +81,7 @@ export {
   Link,
   Confirm,
   Table,
+  EditableNumberCell,
   BasicModal,
   SpaceBetween,
   SpaceCenter,
@@ -105,6 +109,8 @@ export {
   ArrowUpIcon,
   ArrowDownIcon,
   SyncIcon,
+  ShoppingIcon,
+  UndoIcon,
   TooltipIconButton,
   TextButton,
   Dropdown,

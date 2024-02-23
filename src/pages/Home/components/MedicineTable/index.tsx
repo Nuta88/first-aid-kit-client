@@ -26,16 +26,26 @@ import { generateColumns } from './columns';
 interface IMedicineTableProps {
   medicines: Medicine[];
   openModal: (medicine?: Medicine) => void;
+  onUpdate: (medicine: Medicine) => void;
   onSearch: (param: Partial<TQueryFilter>) => void;
 }
 
-const MedicineTable: FC<IMedicineTableProps> = ({ medicines, onSearch, openModal }) => {
+const MedicineTable: FC<IMedicineTableProps> = ({ medicines, onSearch, onUpdate, openModal }) => {
   const { data: csm = [] } = useFetchConstantlyStoredMedicineQuery({});
   const { data: categories = [] } = useFetchCategoryQuery({});
   const [ deleteMedicine ] = useDeleteMedicineMutation({});
   const { isOpenModal: isOpenCSMModal, content: csmSelected, openModal: openCSMModal, hideModal:  hideCSMModal} = useModal<IConstantlyStoredMedicine>();
   const { getSearchProps, getFilterProps } = useColumn(onSearch);
-  const columns: ColumnsType<any> = generateColumns(csm, categories, deleteMedicine, openModal, openCSMModal, getSearchProps, getFilterProps);
+  const columns: ColumnsType<any> = generateColumns(
+    csm,
+    categories,
+    deleteMedicine,
+    onUpdate,
+    openModal,
+    openCSMModal,
+    getSearchProps,
+    getFilterProps
+  );
  
   return (
     <>
