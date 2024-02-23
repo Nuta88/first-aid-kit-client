@@ -1,18 +1,20 @@
 import dayjs from 'dayjs';
 import {
-  AddIcon,
   CircleButton,
   ColumnsType,
   Confirm,
   DeleteIcon,
+  EditableNumberCell,
   EditIcon,
+  ShoppingIcon,
   SpaceBetween,
   TooltipIconButton
 } from '../../../../components';
 import { ICategory } from '../../../../types';
 import {
   ConstantlyStoredMedicine,
-  Medicine
+  Medicine,
+  TMedicine
 } from '../../../../types/medicine';
 import { generateOptions } from '../../../../utils/form';
 import { replaceUnderscoreToSpace } from '../../../../utils/string';
@@ -21,6 +23,7 @@ export const generateColumns = (
   constantlyStoredMedicines: ConstantlyStoredMedicine[],
   categories: ICategory[],
   onDelete: (id: number) => void,
+  onUpdate: ((medicine: TMedicine) => void),
   showModal: (medicine: any) => void,
   showCSMModal: (medicine: any) => void,
   getColumnSearchProps: any,
@@ -42,8 +45,9 @@ export const generateColumns = (
   },
   {
     title: 'Amount',
-    dataIndex: 'amount',
-    key: 'amount'
+    key: 'amount',
+    render: (medicine) => <EditableNumberCell record={medicine} dataIndex="amount" onSave={onUpdate} />,
+    
   },
   {
     title: 'Expiration date',
@@ -66,7 +70,7 @@ export const generateColumns = (
           size="middle"
           type="default"
           data-testid="add-medicine-btn"
-          icon={<AddIcon />}
+          icon={<ShoppingIcon />}
           disabled={constantlyStoredMedicines.some((csm: ConstantlyStoredMedicine) => csm.name === medicine.name)}
           onClick={() => {
             showCSMModal(new ConstantlyStoredMedicine(medicine.name, medicine.categories, medicine.description));

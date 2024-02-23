@@ -1,52 +1,88 @@
 import dayjs from 'dayjs';
 import {
+  CheckIcon,
+  CircleButton,
+  Confirm,
+  DeleteIcon,
+  EditableNumberCell,
   Page,
+  SecondaryText,
+  SpaceBetween,
   SyncIcon,
   Table,
-  TooltipIconButton
+  TextButton,
+  TooltipIconButton,
+  UndoIcon
 } from '../../components';
-import { useAudit } from '../../hooks';
+import { useColumn } from '../../hooks';
 import { ICategory } from '../../types';
 import { TAuditMedicine } from '../../types/audit';
 import { replaceUnderscoreToSpace } from '../../utils/string';
-import EditableCell from './components/EditableCell';
-import { getRowBackground } from "./helpers/helpers";
+import {
+  getRowBackground,
+  idDisabledReset
+} from './helpers/helpers';
+import { useAudit } from './hooks/useAudit';
 
 const Audit = (): JSX.Element => {
   const {
-    medicines,
+    audits,
     selectedRowKeys,
+    rowSelection,
     isLoading,
+    search,
     onUpdateAudit,
     onSyncMedicines,
-    onSelectAudits
+    onDeleteMedicine,
+    onSearch,
+    onClearSearch,
+    onResetAudits
   } = useAudit();
   
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (selectedRowKeys: React.Key[]) => {
-      onSelectAudits(selectedRowKeys);
-    },
-    getCheckboxProps: (record: TAuditMedicine) => ({
-      disabled: record.isCorrect,
-      name: record.name,
-    }),
-  };
+  const { getSearchProps } = useColumn(onSearch);
   
   return (
     <Page
-      extra={
-        <TooltipIconButton
-          loading={isLoading}
-          tooltip="Sync"
-          size="large"
-          icon={<SyncIcon />}
-          data-testid="sync-btn"
-          disabled={!selectedRowKeys.length}
-          onClick={onSyncMedicines}
-        />
+      extra={[
+        <Confirm
+          title={`Are you sure to reset all current changed of audits?`}
+          placement="leftTop"
+          onConfirm={onResetAudits}
+        >
+          <TooltipIconButton
+            loading={isLoading}
+            tooltip="Reset changed of audits"
+            size="large"
+            icon={<UndoIcon />}
+            data-testid="revert-btn"
+            disabled={idDisabledReset(audits.items)}
+          />
+        </Confirm>,
+        <Confirm
+          title={`Are you sure to update amount of the all selected medicines?`}
+          placement="leftTop"
+          onConfirm={onSyncMedicines}
+        >
+          <TooltipIconButton
+            loading={isLoading}
+            tooltip="Sync selected medicines"
+            size="large"
+            icon={<SyncIcon />}
+            data-testid="sync-btn"
+            disabled={!selectedRowKeys.length}
+          />
+        </Confirm>
+        ]
       }
     >
+      <SpaceBetween size="middle">
+        <SecondaryText>
+          (Matched: {audits.matched},
+          Unmatched: {audits.matched})
+          of {audits.total}
+        </SecondaryText>
+        <TextButton onClick={onClearSearch} disabled={!search}>Clear filters</TextButton>
+      </SpaceBetween>
       <Table
         rowKey="id"
         size="small"
@@ -54,7 +90,7 @@ const Audit = (): JSX.Element => {
           type: 'checkbox',
           ...rowSelection,
         }}
-        dataSource={medicines}
+        dataSource={audits.items}
         scroll={{ y: 350 }}
         onRow={(record: TAuditMedicine) => ({
           style: {
@@ -65,34 +101,60 @@ const Audit = (): JSX.Element => {
           {
             title: 'Name',
             key: 'name',
-            render: (medicine) => medicine.name?.toUpperCase(),
-            sorter: (a, b) => a.name.length - b.name.length,
-            sortDirections: ['ascend'],
+            ...getSearchProps('name'),
+            filteredValue: search ? [search] : null,
+            render: (audit) => audit.name?.toUpperCase(),
           },
           {
             title: 'Category',
             key: 'category',
-            render: (medicine) => medicine.categories.map((c: ICategory) => replaceUnderscoreToSpace(c.name)).join(', '),
+            render: (audit) => audit.categories.map((c: ICategory) => replaceUnderscoreToSpace(c.name)).join(', '),
           },
           {
             title: 'Amount',
             dataIndex: 'amount',
             key: 'amount',
+            width: 90,
           },
           {
             title: 'New Amount',
             key: 'new_amount',
-            render: (medicine) => <EditableCell record={medicine} dataIndex="new_amount" onSave={onUpdateAudit} />,
+            width: 110,
+            render: (audit) => <EditableNumberCell record={audit} dataIndex="new_amount" onSave={onUpdateAudit} />,
           },
           {
             title: 'Expiration date',
-            render: (medicine) => dayjs(medicine['expiration_date']).format('MMMM D, YYYY'),
+            render: (audit) => dayjs(audit['expiration_date']).format('MMMM D, YYYY'),
             key: 'expiration_date'
           },
           {
             title: 'Description',
             dataIndex: 'description',
             key: 'description'
+          },
+          {
+            title: 'Action',
+            key: 'action',
+            width: 120,
+            render: (audit) => (
+              <SpaceBetween size="middle">
+                <TooltipIconButton
+                  tooltip="Use amount for new amount"
+                  size="middle"
+                  type="default"
+                  data-testid="add-medicine-btn"
+                  icon={<CheckIcon />}
+                  onClick={() => { onUpdateAudit({...audit, new_amount: audit.amount}); }}
+                />
+                <Confirm
+                  title={`Are you sure to delete "${audit.name}"?`}
+                  placement="leftTop"
+                  onConfirm={() => { onDeleteMedicine(audit.id); }}
+                >
+                  <CircleButton type="primary" icon={<DeleteIcon />} disabled={audit.new_amount} />
+                </Confirm>
+              </SpaceBetween>
+            ),
           }
         ]}
       />

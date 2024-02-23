@@ -73,6 +73,7 @@ const Home = (): JSX.Element => {
             children: (
               <MedicineTable
                 medicines={medicines}
+                onUpdate={updateMedicine}
                 onSearch={setMedicineQuery}
                 openModal={openModal}
               />
@@ -85,6 +86,7 @@ const Home = (): JSX.Element => {
               <MedicineTable
                 medicines={expiredMedicines}
                 onSearch={setExpiredMedicineQuery}
+                onUpdate={updateMedicine}
                 openModal={openModal}
               />
             ),
