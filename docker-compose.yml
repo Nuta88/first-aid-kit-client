@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  fak_app_client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fak_app_client
+    environment:
+      - REACT_APP_BASE_URL=http://localhost:3002/api
+    ports:
+      - "3000:3000"
+    restart: always
