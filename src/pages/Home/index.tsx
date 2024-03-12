@@ -32,6 +32,8 @@ const Home = (): JSX.Element => {
     medicines,
     csMedicines,
     expiredMedicines,
+    medicineQuery,
+    expiredMedicineQuery,
     setExpiredMedicineQuery,
     setMedicineQuery
   } = useFetchMedicines();
@@ -47,11 +49,11 @@ const Home = (): JSX.Element => {
   
   const handleOpenCreateModal = useCallback(() => {
     openModal();
-  }, []);
+  }, [openModal]);
   
   const handleOpenCSMModal = useCallback(() => {
     openCSMModal();
-  }, []);
+  }, [openCSMModal]);
   
   return (
     <Page
@@ -72,6 +74,7 @@ const Home = (): JSX.Element => {
             key: 'medicine',
             children: (
               <MedicineTable
+                filter={medicineQuery}
                 medicines={medicines}
                 onUpdate={updateMedicine}
                 onSearch={setMedicineQuery}
@@ -84,6 +87,7 @@ const Home = (): JSX.Element => {
             key: 'expired',
             children: (
               <MedicineTable
+                filter={expiredMedicineQuery}
                 medicines={expiredMedicines}
                 onSearch={setExpiredMedicineQuery}
                 onUpdate={updateMedicine}

@@ -4,11 +4,11 @@ import {
 } from 'react';
 
 import {
-  AddIcon,
   CircleButton,
   Confirm,
   DeleteIcon,
   EditIcon,
+  MedicineBoxIcon,
   SpaceBetween,
   Table,
   TooltipIconButton
@@ -95,7 +95,7 @@ const CSMTable: FC<IMedicineTableProps> = ({ openModal, onOpenMedicineModal }) =
                 <TooltipIconButton
                   tooltip="Add medicine"
                   size="middle"
-                  icon={<AddIcon />}
+                  icon={<MedicineBoxIcon />}
                   onClick={() => handleOpenMedicineModal(medicine)}
                 />
                 <CircleButton

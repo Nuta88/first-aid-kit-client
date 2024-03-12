@@ -18,6 +18,7 @@ export const BasicModal = ({ title, isOpen, children, onSave, onCancel, ...props
     open={isOpen}
     onOk={onSave}
     onCancel={onCancel}
+    destroyOnClose
     {...props}
   >
     {children}

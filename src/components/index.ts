@@ -38,6 +38,7 @@ import {
   ShoppingIcon,
   SyncIcon,
   UndoIcon,
+  MedicineBoxIcon,
 } from './Icons';
 import { Loading } from './Loading';
 import { BasicModal } from './Modal';
@@ -111,6 +112,7 @@ export {
   SyncIcon,
   ShoppingIcon,
   UndoIcon,
+  MedicineBoxIcon,
   TooltipIconButton,
   TextButton,
   Dropdown,

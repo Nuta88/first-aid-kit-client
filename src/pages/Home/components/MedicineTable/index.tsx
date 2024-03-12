@@ -18,19 +18,21 @@ import {
   IConstantlyStoredMedicine,
   Medicine
 } from '../../../../types/medicine';
-import { TQueryFilter } from "../../../../types/query";
+import { TQueryFilter } from '../../../../types/query';
+import { isObjectEmpty } from '../../../../utils/object';
 import CSMModal from '../CSMModal';
 import { getTableRowColor } from '../helpers';
 import { generateColumns } from './columns';
 
 interface IMedicineTableProps {
   medicines: Medicine[];
+  filter: Partial<TQueryFilter>;
   openModal: (medicine?: Medicine) => void;
   onUpdate: (medicine: Medicine) => void;
   onSearch: (param: Partial<TQueryFilter>) => void;
 }
 
-const MedicineTable: FC<IMedicineTableProps> = ({ medicines, onSearch, onUpdate, openModal }) => {
+const MedicineTable: FC<IMedicineTableProps> = ({ medicines, filter, onSearch, onUpdate, openModal }) => {
   const { data: csm = [] } = useFetchConstantlyStoredMedicineQuery({});
   const { data: categories = [] } = useFetchCategoryQuery({});
   const [ deleteMedicine ] = useDeleteMedicineMutation({});
@@ -39,6 +41,7 @@ const MedicineTable: FC<IMedicineTableProps> = ({ medicines, onSearch, onUpdate,
   const columns: ColumnsType<any> = generateColumns(
     csm,
     categories,
+    filter,
     deleteMedicine,
     onUpdate,
     openModal,
@@ -59,6 +62,8 @@ const MedicineTable: FC<IMedicineTableProps> = ({ medicines, onSearch, onUpdate,
             background: getTableRowColor(record['expiration_date']),
           }
         })}
+        onClearFilter={()=> onSearch({})}
+        isDisabledFilter={isObjectEmpty(filter)}
         scroll={{ y: 340 }}
       />
       {isOpenCSMModal && <CSMModal

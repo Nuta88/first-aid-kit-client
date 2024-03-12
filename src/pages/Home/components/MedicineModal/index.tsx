@@ -39,16 +39,16 @@ const MedicineModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCreate, on
   };
   
   const onFinish = (values: IFormValues): void => {
-    const newMed = generateMedicine(values, medicine, categories);
+    const newMedicine = generateMedicine(values, medicine, categories);
     
     onCloseModal();
     
-    if ( medicine ) {
-      onUpdate(newMed);
+    if ( medicine?.id ) {
+      onUpdate(newMedicine);
       return;
     }
   
-    onCreate(newMed);
+    onCreate(newMedicine);
   };
 
   return (

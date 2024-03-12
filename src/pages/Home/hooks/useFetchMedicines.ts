@@ -11,12 +11,13 @@ export const useFetchMedicines = () => {
   const { data: medicines = [], isFetching: isFetchingMedicine } = useFetchMedicineQuery(medicineQuery);
   const { data: expiredMedicines = [], isFetching: isFetchingExpiredMedicines } = useFetchExpiredMedicineQuery(expiredMedicineQuery);
   const { data: csMedicines = [], isFetching: isFetchingCSMedicines } = useFetchConstantlyStoredMedicineQuery({});
-
   
   return {
     medicines,
     csMedicines,
     expiredMedicines,
+    medicineQuery,
+    expiredMedicineQuery,
     isLoading: isFetchingMedicine || isFetchingExpiredMedicines || isFetchingCSMedicines,
     setExpiredMedicineQuery,
     setMedicineQuery

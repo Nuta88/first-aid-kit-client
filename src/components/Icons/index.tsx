@@ -16,7 +16,8 @@ import {
   AuditOutlined,
   SyncOutlined,
   ShoppingOutlined,
-  UndoOutlined
+  UndoOutlined,
+  MedicineBoxOutlined
 } from '@ant-design/icons';
 
 export {
@@ -37,5 +38,6 @@ export {
   AuditOutlined as AuditIcon,
   SyncOutlined as SyncIcon,
   ShoppingOutlined as ShoppingIcon,
-  UndoOutlined as UndoIcon
+  UndoOutlined as UndoIcon,
+  MedicineBoxOutlined as MedicineBoxIcon
 };

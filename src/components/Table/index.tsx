@@ -5,6 +5,16 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
+import { TextButton } from '../Buttons/TextButton';
+import { SpaceBetween } from '../Space/SpaceBetween';
+import { SecondaryText } from '../Typography/SecondaryText';
+
+interface ITableProps {
+  secondTitle?: string | null,
+  children?: ReactNode,
+  onClearFilter?: () => void,
+  isDisabledFilter?: boolean
+}
 
 const TableStyled = styled(AntdTable)`
   .ant-spin-container {
@@ -29,8 +39,16 @@ const TableStyled = styled(AntdTable)`
   }
 `;
 
-const Table = (props: JSX.IntrinsicAttributes & TableProps<any> & { children?: ReactNode }): JSX.Element => (
-  <TableStyled {...props} />
+const Table = ({isDisabledFilter = true, secondTitle, onClearFilter, ...props}: JSX.IntrinsicAttributes & TableProps<any> & ITableProps): JSX.Element => (
+  <>
+    <SpaceBetween size="middle">
+      <SecondaryText>
+        {secondTitle}
+      </SecondaryText>
+      {onClearFilter && <TextButton onClick={onClearFilter} disabled={isDisabledFilter}>Clear filters</TextButton>}
+    </SpaceBetween>
+    <TableStyled {...props} />
+  </>
 );
 
 export { Table, ColumnsType };

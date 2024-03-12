@@ -1,6 +1,7 @@
 import { Colors } from '../../../constants/common';
 import { TAuditMedicine } from '../../../types/audit';
 import { TMedicine } from '../../../types/medicine';
+import { isEqualsByKeys } from '../../../utils/object';
 
 const isRowAmountEquals = (audit: TAuditMedicine) => audit.amount === audit.new_amount;
 
@@ -93,13 +94,4 @@ export const isEquals = (medicines: TMedicine[], audits: TAuditMedicine[]) => {
  }
  
  return true;
-};
-
-const isEqualsByKeys = (obj1: any, obj2: any, keys: string[]): boolean => {
- return keys.every((key: string) => {
-  if ( !Array.isArray(obj1[key]) ) return obj1[key] === obj2[key];
-
-  const arrKeys = Object.keys(obj1[key][0]);
-  return isEqualsByKeys(obj1[key], obj2[key], arrKeys);
- });
 };

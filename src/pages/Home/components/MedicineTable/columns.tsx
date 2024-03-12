@@ -16,12 +16,14 @@ import {
   Medicine,
   TMedicine
 } from '../../../../types/medicine';
+import { TQueryFilter } from "../../../../types/query";
 import { generateOptions } from '../../../../utils/form';
 import { replaceUnderscoreToSpace } from '../../../../utils/string';
 
 export const generateColumns = (
   constantlyStoredMedicines: ConstantlyStoredMedicine[],
   categories: ICategory[],
+  filter: Partial<TQueryFilter>,
   onDelete: (id: number) => void,
   onUpdate: ((medicine: TMedicine) => void),
   showModal: (medicine: any) => void,
@@ -33,6 +35,7 @@ export const generateColumns = (
     title: 'Name',
     key: 'name',
     ...getColumnSearchProps('name'),
+    filteredValue: filter.name ? [filter.name] : [],
     render: (medicine) => medicine.name?.toUpperCase(),
     sorter: (a, b) => a.name.length - b.name.length,
     sortDirections: ['ascend'],
@@ -41,7 +44,8 @@ export const generateColumns = (
     title: 'Category',
     key: 'category',
     render: (medicine) => medicine.categories.map((c: ICategory) => replaceUnderscoreToSpace(c.name)).join(', '),
-    ...getFilterProps('categories', generateOptions(categories, 'id', 'name'))
+    ...getFilterProps('categories', generateOptions(categories, 'id', 'name')),
+    filteredValue: filter.categories ? filter.categories : [],
   },
   {
     title: 'Amount',

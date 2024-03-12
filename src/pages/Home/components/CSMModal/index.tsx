@@ -7,8 +7,7 @@ import {
 import {
   BasicModal,
   Input,
-  Select,
-  SelectOption
+  Select
 } from '../../../../components';
 import { layout } from '../../../../constants/form';
 import { MedicinePriorityEnum } from '../../../../constants/medicine';
@@ -18,14 +17,18 @@ import {
   useUpdateConstantlyStoredMedicineMutation
 } from '../../../../services/constantlyStoredMedicine';
 import { IConstantlyStoredMedicine } from '../../../../types/medicine';
-import { generateOptions } from "../../../../utils/form";
+import {
+  generateOptions,
+  generateOptionsFromStringList
+} from '../../../../utils/form';
+import { useFetchMedicines } from '../../hooks/useFetchMedicines';
 
 import {
-  createInitFormValues,
+  generateErrorFormFields,
   generateMedicine,
-  IFormValues,
-  isMedicineExisted
+  IFormValues
 } from './helpers';
+import { useForm } from "./hooks/useForm";
 
 interface IMedicineModalProps {
   isOpen: boolean;
@@ -34,14 +37,14 @@ interface IMedicineModalProps {
 }
 
 const CSMModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCancel }) => {
-  const isCreateMedicine = !medicine || !medicine.id || !medicine.priority;
-  const title = isCreateMedicine ? 'Add medication to permanent storage' : 'Edit constantly stored medicine';
-  const initialValues = createInitFormValues(medicine);
+  const [ form ] = Form.useForm();
+  const { rules, initialValues, isDisabledFormItem } = useForm(medicine);
   const { data: categories = [] } = useFetchCategoryQuery({});
+  const { csMedicines } = useFetchMedicines();
   const [ createConstantlyStoredMedicine ] = useCreateConstantlyStoredMedicineMutation({});
   const [ updateConstantlyStoredMedicine ] = useUpdateConstantlyStoredMedicineMutation({});
-  const [ form ] = Form.useForm();
-  const isDisabledFormItem = !!medicine && !isMedicineExisted(medicine);
+  const isCreateMedicine = !medicine || !medicine.id || !medicine.priority;
+  const title = isCreateMedicine ? 'Add medication to permanent storage' : 'Edit constantly stored medicine';
   
   const onCloseModal = (): void => {
     form.resetFields();
@@ -62,7 +65,21 @@ const CSMModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCancel }) => {
       title={title}
       isOpen={isOpen}
       okText="Save"
-      onOk={form.submit}
+      onOk={async () => {
+        try {
+          const values = await form?.validateFields();
+          const errors = generateErrorFormFields(values, csMedicines);
+  
+          if ( errors.length ) {
+            form.setFields(errors);
+            return;
+          }
+          
+          onFinish(values);
+        } catch (error) {
+          console.log('Failed:', error);
+        }
+      }}
       onCancel={onCloseModal}
     >
       <Form
@@ -71,7 +88,6 @@ const CSMModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCancel }) => {
         initialValues={initialValues}
         name="medicine-modal"
         autoComplete="off"
-        onFinish={onFinish}
       >
         <Form.Item
           name="priority"
@@ -82,23 +98,13 @@ const CSMModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCancel }) => {
         >
           <Select
             placeholder="Select priority"
-            allowClear
-          >
-            {Object.values(MedicinePriorityEnum).map((priority: string) => (
-              <SelectOption
-                key={priority}
-                value={priority}>
-                {priority}
-              </SelectOption>
-            ))}
-          </Select>
+            options={generateOptionsFromStringList(Object.values(MedicinePriorityEnum))}
+          />
         </Form.Item>
         <Form.Item
           name="categoryNames"
           label="Category"
-          rules={[
-            { required: true, message: 'Please select category!' }
-          ]}
+          rules={rules.category}
         >
           <Select
             mode="multiple"
@@ -109,27 +115,30 @@ const CSMModal: FC<IMedicineModalProps> = ({ isOpen, medicine, onCancel }) => {
           />
         </Form.Item>
         <Form.Item
-          label="Name"
-          name="name"
-          data-testid="name"
-          rules={[
-            { required: true, message: 'Please input name!' },
-            {
-              type: 'string',
-              min: 2,
-              max: 50,
-              message: 'Recipient must be from 2 characters to 50 characters!'
-            }
-          ]}
+          noStyle
+          shouldUpdate
         >
-          <Input disabled={isDisabledFormItem} />
-        </Form.Item>
-        <Form.Item
-          label="Description"
-          name="description"
-          data-testid="description"
-        >
-          <Input type="textarea" rows={4} disabled={isDisabledFormItem} />
+          {({ getFieldValue }) =>
+            getFieldValue('priority') === MedicinePriorityEnum.NAME ? (
+              <>
+                <Form.Item
+                  label="Name"
+                  name="name"
+                  data-testid="name"
+                  rules={rules.name}
+                >
+                  <Input disabled={isDisabledFormItem} />
+                </Form.Item>
+                <Form.Item
+                  label="Description"
+                  name="description"
+                  data-testid="description"
+                >
+                  <Input type="textarea" rows={4} disabled={isDisabledFormItem} />
+                </Form.Item>
+              </>
+            ) : null
+          }
         </Form.Item>
       </Form>
     </BasicModal>

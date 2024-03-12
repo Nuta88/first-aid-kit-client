@@ -6,11 +6,9 @@ import {
   DeleteIcon,
   EditableNumberCell,
   Page,
-  SecondaryText,
   SpaceBetween,
   SyncIcon,
   Table,
-  TextButton,
   TooltipIconButton,
   UndoIcon
 } from '../../components';
@@ -40,6 +38,9 @@ const Audit = (): JSX.Element => {
   } = useAudit();
   
   const { getSearchProps } = useColumn(onSearch);
+  const tableTitle = `(Matched: ${audits.matched},
+          Unmatched: ${audits.matched})
+          of ${audits.total}`;
   
   return (
     <Page
@@ -75,14 +76,6 @@ const Audit = (): JSX.Element => {
         ]
       }
     >
-      <SpaceBetween size="middle">
-        <SecondaryText>
-          (Matched: {audits.matched},
-          Unmatched: {audits.matched})
-          of {audits.total}
-        </SecondaryText>
-        <TextButton onClick={onClearSearch} disabled={!search}>Clear filters</TextButton>
-      </SpaceBetween>
       <Table
         rowKey="id"
         size="small"
@@ -90,6 +83,9 @@ const Audit = (): JSX.Element => {
           type: 'checkbox',
           ...rowSelection,
         }}
+        secondTitle={tableTitle}
+        onClearFilter={onClearSearch}
+        isDisabledFilter={!search}
         dataSource={audits.items}
         scroll={{ y: 350 }}
         onRow={(record: TAuditMedicine) => ({
