@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useParams } from 'react-router';
 import {
   Page,
   Tabs
@@ -25,8 +24,7 @@ import PageButton from './components/PageButton';
 import { useFetchMedicines } from './hooks/useFetchMedicines';
 
 const Home = (): JSX.Element => {
-  const { tab = 'medicine' } = useParams();
-  const { tabKey, setTabKey } = useTabs(tab ?? 'medicine');
+  const { tabKey, setTabKey } = useTabs();
   const {
     isLoading,
     medicines,

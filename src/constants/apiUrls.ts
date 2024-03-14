@@ -28,7 +28,7 @@ export const authorizedPaths = [ '/login', '/register' ];
 export const navigationLinks = [
   {
     name: 'Medicine',
-    link: apiUrls.root
+    link: apiUrls.medicine.root
   },
   {
     name: 'Category',

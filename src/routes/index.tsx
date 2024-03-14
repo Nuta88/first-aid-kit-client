@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider
 } from 'react-router-dom';
 
@@ -21,12 +22,17 @@ const routers = createBrowserRouter([
     element: <PageLayout />,
     errorElement: <ErrorBoundary />,
     children: [
+      
       {
-        path: '/:tab',
+        path: '/',
+        element: <Navigate to="/medicine" replace />
+      },
+      {
+        path: 'medicine',
         element: <Home />
       },
       {
-        path: '/',
+        path: 'medicine/:tab',
         element: <Home />
       },
       {

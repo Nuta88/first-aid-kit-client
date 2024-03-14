@@ -3,11 +3,16 @@ import {
   useEffect,
   useState
 } from 'react';
-import { useNavigate } from 'react-router';
+import {
+  useNavigate,
+  useParams
+} from 'react-router';
+import { apiUrls } from '../constants/apiUrls';
 import { MedicineTabs } from '../constants/medicine';
 
-export const useTabs = (tab: string) => {
+export const useTabs = () => {
   const navigate = useNavigate();
+  const { tab = 'medicine' } = useParams();
   const [ tabKey, setTabKey ] = useState(tab ?? 'medicine');
   const tabKeys: string[] = Object.values(MedicineTabs).filter((v) => isNaN(Number(v)));
   
@@ -17,7 +22,8 @@ export const useTabs = (tab: string) => {
   
   const changeTab = useCallback((key: string) => {
     setTabKey(key);
-    navigate(`/${key}`);
+    
+    navigate(key === MedicineTabs.Medicine ? apiUrls.medicine.root : `${apiUrls.medicine.root}/${key}`);
   }, [navigate]);
   
   return { tabKey, setTabKey: changeTab };
