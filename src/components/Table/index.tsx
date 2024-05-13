@@ -17,6 +17,9 @@ interface ITableProps {
 }
 
 const TableStyled = styled(AntdTable)`
+  .selected-row {
+    background-color: rgba(236,165,165,0.43);
+  }
   .ant-spin-container {
     display: flex;
     flex-direction: column;

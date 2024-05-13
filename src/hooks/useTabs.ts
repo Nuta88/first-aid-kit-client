@@ -13,7 +13,7 @@ export const useTabs = (tab: string) => {
   
   useEffect(() => {
     if (tab && !tabKeys.includes(tab)) navigate(-1);
-  }, [tab, tabKey, navigate]);
+  }, [tab, tabKey, tabKeys, navigate]);
   
   const changeTab = useCallback((key: string) => {
     setTabKey(key);
