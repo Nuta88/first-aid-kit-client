@@ -30,7 +30,7 @@ const ArrowIconStyled = styled(ArrowLeftIcon)`
 `;
 
 const CardStyled = styled(Card)`
-  height: calc(100% - 1.5rem);
+  height: calc(100% - 4.3rem);
   overflow: auto;
   padding-bottom: 1rem;
   background-color: ${colors.cardBackground};
