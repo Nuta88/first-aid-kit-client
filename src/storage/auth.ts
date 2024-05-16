@@ -26,6 +26,7 @@ export const clearTokens = async () => {
   const db = await dbPromise;
   const tx = db.transaction(authStoreName, 'readwrite');
   const store = tx.objectStore(authStoreName);
-
+  localStorage.setItem('user', '');
+  
   store.clear();
 };

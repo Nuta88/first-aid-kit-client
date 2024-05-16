@@ -53,6 +53,10 @@ const CSMTable: FC<IMedicineTableProps> = ({ openModal, onOpenMedicineModal }) =
     onOpenMedicineModal(new Medicine(name, categories, 1, convertDateToString(today), description));
   };
   
+  const rowClassName = (record: IConstantlyStoredMedicine) => {
+    return record.isMissing ? 'selected-row' : '';
+  };
+  
   return (
     <>
       <Table
@@ -60,11 +64,7 @@ const CSMTable: FC<IMedicineTableProps> = ({ openModal, onOpenMedicineModal }) =
         size="small"
         dataSource={medicines}
         scroll={{ y: 350 }}
-        onRow={(record: IConstantlyStoredMedicine) => ({
-          style: {
-            background: record.isMissing ? 'rgba(236,165,165,0.43)' : 'default',
-          }
-        })}
+        rowClassName={rowClassName}
         columns={[
           {
             title: 'Name',

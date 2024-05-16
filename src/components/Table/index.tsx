@@ -17,10 +17,13 @@ interface ITableProps {
 }
 
 const TableStyled = styled(AntdTable)`
+  .selected-row {
+    background-color: rgba(236,165,165,0.43);
+  }
   .ant-spin-container {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 18rem);
+    min-height: calc(100vh - 20rem);
   }
   .ant-table {
     flex-grow: 1;

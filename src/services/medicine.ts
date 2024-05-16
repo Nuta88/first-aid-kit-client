@@ -28,7 +28,7 @@ const medicineApi = api.injectEndpoints({
         method: 'POST',
         body
       }),
-      invalidatesTags: [ 'Medicine' ]
+      invalidatesTags: [ 'Medicine', 'ConstantlyStoredMedicine' ]
     }),
     updateMedicine: builder.mutation<Medicine, Partial<Medicine>>({
       query: (body) => ({
@@ -52,7 +52,7 @@ const medicineApi = api.injectEndpoints({
         method: 'DELETE',
         params
       }),
-      invalidatesTags: [ 'Medicine' ]
+      invalidatesTags: [ 'Medicine', 'ConstantlyStoredMedicine' ]
     })
   }),
   overrideExisting: false,
