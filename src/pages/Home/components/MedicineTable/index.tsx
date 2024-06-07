@@ -49,7 +49,9 @@ const MedicineTable: FC<IMedicineTableProps> = ({ medicines, filter, onSearch, o
     getSearchProps,
     getFilterProps
   );
- 
+  
+  const onClearFilter = () => onSearch({});
+  
   return (
     <>
       <Table
@@ -62,7 +64,7 @@ const MedicineTable: FC<IMedicineTableProps> = ({ medicines, filter, onSearch, o
             background: getTableRowColor(record['expiration_date']),
           }
         })}
-        onClearFilter={()=> onSearch({})}
+        onClearFilter={onClearFilter}
         isDisabledFilter={isObjectEmpty(filter)}
         scroll={{ y: 340 }}
       />

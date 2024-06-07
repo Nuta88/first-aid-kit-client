@@ -2,6 +2,7 @@ import { AuthPageLayout } from './AuthPageLayout';
 import { AuthForm } from './AuthPageLayout/Page';
 import { Button } from './Buttons';
 import { CircleButton } from './Buttons/CircleButton';
+import { Checkbox } from './Checkbox';
 import { IconButton } from './Buttons/IconButton';
 import { SubmitButton } from './Buttons/SubmitButton';
 import { TextButton } from './Buttons/TextButton';
@@ -49,6 +50,7 @@ import { Row } from './Row';
 import { Search } from './Search';
 import { SpaceBetween } from './Space/SpaceBetween';
 import { SpaceCenter } from './Space/SpaceCenter';
+import { SpaceAround } from './Space/SpaceAround';
 import { Statistic } from './Statistic';
 import {
   ColumnsType,
@@ -72,6 +74,7 @@ export {
   Row,
   Col,
   Card,
+  Checkbox,
   ErrorBoundary,
   Page,
   ProgressBar,
@@ -86,6 +89,7 @@ export {
   BasicModal,
   SpaceBetween,
   SpaceCenter,
+  SpaceAround,
   Tooltip,
   Form,
   Input,
